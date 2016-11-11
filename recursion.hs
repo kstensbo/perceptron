@@ -17,7 +17,7 @@ maximumG [x] = x
 maximumG (x:xs)
 	| x > maxTail = x
 	|otherwise = maxTail
-	where maxTail= maximumG xs
+	where maxTail= maximum' xs
 
 
 --Homemade maximum max
@@ -39,4 +39,4 @@ sayMe' x
 
 -- This error occurs only with 6 as far as i know. Why?
 -- ghci>sayMe' 6
--- "*** Exception: Prelude.!!: index too large 
+-- "*** Exception: Prelude.!!: index too large
