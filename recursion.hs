@@ -22,6 +22,8 @@ maximumG (x:xs)
 
 --Home-made maximum max
 
+Er det her Haskell?
+
 maximum' :: (Ord a)=> [a]->a
 maximum' [] = error "maximum of empty list"
 maximum' [x] = x
