@@ -17,7 +17,7 @@ maximumG [x] = x
 maximumG (x:xs)
 	| x > maxTail = x
 	|otherwise = maxTail
-	where maxTail= maximum' xs
+	where maxTail= maximumG xs
 
 
 --Homemade maximum max
