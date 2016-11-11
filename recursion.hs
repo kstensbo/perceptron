@@ -17,7 +17,7 @@ maximumG [x] = x
 maximumG (x:xs)
 	| x > maxTail = x
 	|otherwise = maxTail
-	where maxTail= maximum'' xs
+	where maxTail= maximumG xs
 
 
 --Homemade maximum max
@@ -33,7 +33,7 @@ maximum' (x:xs) = max x (maximum' xs)
 sayMe' :: Int -> String
 sayMe' x
 	|x<0 = "Say no to negativity"
-	|x<=(length sayNumbers) = sayNumbers !! x
+	|x<=(length sayNumbers - 1) = sayNumbers !! x
 	|otherwise = "Woah, stop, that one is too big! I can only count so many"
 	where sayNumbers = ["zero!","one!","two!","three!","four!","five!"]
 
