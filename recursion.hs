@@ -3,6 +3,8 @@ xData = [(0.6492, 10.5492), (5.0576, -1.9462), (-5.9590, 7.8897), (2.9614, 1.354
 yData :: [Float]
 yData = [-1, 1, -1, 1, 1, 1, 1, -1, 1, 1, 1, -1, -1, -1, -1, -1, 1, 1, 1, 1, -1, -1, -1, 1, -1, 1, 1, -1, -1, -1]
 
+xyData = zip xData yData
+
 infiniteData :: [a]->[a]
 infiniteData xs = xs ++ infiniteData xs
 
@@ -15,3 +17,9 @@ addV (x1,x2) (y1,y2) = (x1+y1,x2+y2)
 weight 0 _ _ = (1,1)
 weight k ys xs = addV (weight (k-1) ys xs) deltaw
 	where deltaw = scaleV ((infiniteData xs) !! (k-1)) ((infiniteData ys) !! (k-1)) 
+
+prikV (x1,x2) (y1,y2) = (x1*y1)+(x2*y2)
+
+perceptron = head [weight k xData yData|k<-[0..],x<-xData, prikV (weight k xData yData) x <0]
+
+
