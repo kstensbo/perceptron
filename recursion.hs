@@ -14,12 +14,12 @@ scaleV a (x1,x2) = (a*x1,a*x2)
 addV :: (Float,Float)->(Float,Float)->(Float,Float)
 addV (x1,x2) (y1,y2) = (x1+y1,x2+y2)
 
-weight 0 _ _ = (1,1)
+weight 0 _ _ = (1,0)
 weight k ys xs = addV (weight (k-1) ys xs) deltaw
 	where deltaw = scaleV ((infiniteData xs) !! (k-1)) ((infiniteData ys) !! (k-1)) 
 
 prikV (x1,x2) (y1,y2) = (x1*y1)+(x2*y2)
 
-perceptron = head [weight k xData yData|k<-[0..],x<-xData, prikV (weight k xData yData) x <0]
+perceptron = head [weight k xData yData|k<-[1..],(x,y)<-xyData, (y * prikV (weight k xData yData) x) >0]
 
-
+listw =[weight k xData yData|k<-[0..100]]
