@@ -20,6 +20,13 @@ weight k ys xs = addV (weight (k-1) ys xs) deltaw
 
 prikV (x1,x2) (y1,y2) = (x1*y1)+(x2*y2)
 
-perceptron = head [weight k xData yData|k<-[1..],(x,y)<-xyData, (y * prikV (weight k xData yData) x) >0]
+listW= [weight k|k<-[0..]]
 
-listw =[weight k xData yData|k<-[0..100]]
+checkW [] = True 
+checkW (x:xs) z = if prik z x >0 then checkW xs z else False
+
+perceptron head [w|w<-listW,checkW xData w=True]
+
+
+
+
