@@ -18,7 +18,7 @@ kippers x w = w + x
 selleri :: [Integer] -> Integer -> Integer -> (Integer, Integer)
 selleri _ w 0 = (w, 0)
 selleri (x:xs) w n
-    | kippers x w > 100 = (w, n)
+    | kippers x w > 100 = (kippers x w, n)
     | otherwise = selleri xs (kippers x w) (n-1)
 
 
