@@ -18,6 +18,10 @@ weight 0 _ _ = (1,0)
 weight k ys xs = addV (weight (k-1) ys xs) deltaw
 	where deltaw = scaleV ((infiniteData xs) !! (k-1)) ((infiniteData ys) !! (k-1)) 
 
+ 
+
+
+
 prikV (x1,x2) (y1,y2) = (x1*y1)+(x2*y2)
 
 listW = [weight k xData yData|k<-[0..]]
@@ -27,6 +31,10 @@ checkW (x:xs) z = if prikV z x >0 then checkW xs z else False
 
 
 perceptron = head [x|x<-listW,(checkW xData x) == True]
+checkP = [(x,prikV x*xElem (checkW xData x))|x<-listW]
 
+perceptron (x:xs)
+	|(checkW xData x) == True = x
+	| otherwise perceptron xs
 
 

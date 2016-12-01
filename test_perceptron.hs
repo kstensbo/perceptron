@@ -6,11 +6,8 @@ xData = [(0.6492, 10.5492), (5.0576, -1.9462), (-5.9590, 7.8897), (2.9614, 1.354
 yData :: [Double]
 yData = [-1, 1, -1, 1, 1, 1, 1, -1, 1, 1, 1, -1, -1, -1, -1, -1, 1, 1, 1, 1, -1, -1, -1, 1, -1, 1, 1, -1, -1, -1]
 
---infDat :: [a]->[a]
-infDat xs = xs ++ infDat xs
-
 -------------------
--- Vektor regning
+-- Vektorregning
 -------------------
 --dotV :: (Num a, Ord a)=>(a,a)->(a,a)-> a
 dotV (x1,x2) (y1,y2) = (x1*y1)+(x2*y2)
@@ -30,10 +27,10 @@ checkClass w x
 	|otherwise = -1
 
 --checkList :: (Num a, Ord a)=>(a,a)->[(a,a)]-> Bool
-checkList _ [] = True
-checkList w (x:xs)
-	|checkClass w x == -1 = False
-	|otherwise = checkList w xs
+checkList _ [] _ = True
+checkList w (x:xs) (y:ys)
+	|(checkClass w x)*y == -1 = False
+	|otherwise = checkList w xs ys
 
 ----------
 --Træning
@@ -45,8 +42,12 @@ train w x y
 
 
 -- trainList :: (Num a, Ord a)=>(a,a)->[(a,a)]->[a]->(a,a)
+trainList w [] [] = trainList w xData yData
 trainList w (x:xs) (y:ys)
-	|checkList w xData = w
+	|checkList w xData yData = w 
 	|otherwise = trainList (train w x y) xs ys
+
+
+
 
 
