@@ -10,24 +10,24 @@ yData = [-1, 1, -1, 1, 1, 1, 1, -1, 1, 1, 1, -1, -1, -1, -1, -1, 1, 1, 1, 1, -1,
 -------------------
 -- Vektorregning
 -------------------
---dotV :: (Num a, Ord a)=>(a,a)->(a,a)-> a
+dotV :: (Num a, Ord a)=>(a,a)->(a,a)-> a
 dotV (x1,x2) (y1,y2) = (x1*y1)+(x2*y2)
 
---addV :: (Num a, Ord a)=>(a,a)->(a,a)->(a,a)
+addV :: (Num a, Ord a)=>(a,a)->(a,a)->(a,a)
 addV (x1,x2) (y1,y2) = (x1+y1,x2+y2)
 
---scaleV :: (Num a, Ord a)=>(a,a)->a->(a,a)
+scaleV :: (Num a, Ord a)=>(a,a)->a->(a,a)
 scaleV (x1,x2) a = (a*x1,a*x2)
 
 -----------------
 --Klassificering
 -----------------
---checkClass :: (Num a, Ord a)=>(a,a)->(a,a)-> a
+checkClass :: (Num a, Ord a) => (a,a) -> (a,a) -> a
 checkClass w x
 	|(dotV x w) >0 = 1
 	|otherwise = -1
 
---checkList :: (Num a, Ord a)=>(a,a)->[(a,a)]-> Bool
+checkList :: (Num a, Ord a) => (a,a) -> [(a,a)] -> [a] -> Bool
 checkList _ [] _ = True
 checkList w (x:xs) (y:ys)
 	|(checkClass w x)*y == -1 = False
@@ -36,7 +36,7 @@ checkList w (x:xs) (y:ys)
 ----------
 --Træning
 ----------
--- train :: (Num a, Ord a)=>(a,a)->(a,a)->a->(a,a)
+train :: (Num a, Ord a) => (a,a) -> (a,a) -> a -> (a,a)
 train w x y
 	|checkClass w x == y = w
 	|otherwise = addV w (scaleV (scaleV x eta) y)
@@ -50,6 +50,7 @@ train w x y
 --	|otherwise = trainList (train w x y) xs ys
 
 
+perceptron :: (Num a, Ord a) => (a,a) -> [(a,a)] -> [a] -> a -> (a,a)
 perceptron ws xd yd n = trainList ws (cycle xd) (cycle yd) n where
     trainList w (x:xs) (y:ys) m
         | m < 0 = w
