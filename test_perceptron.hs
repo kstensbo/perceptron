@@ -36,11 +36,11 @@ checkList w (x:xs) (y:ys)
 ----------
 --Træning
 ----------
-train :: (Num a, Ord a) => (a,a) -> (a,a) -> a -> (a,a)
-train w x y
+train :: (Num a, Ord a) => (a,a) -> (a,a) -> a -> a -> (a,a)
+train w x y eta
 	|checkClass w x == y = w
 	|otherwise = addV w (scaleV (scaleV x eta) y)
-	where eta = 1
+
 
 -- trainList :: (Num a, Ord a)=>(a,a)->[(a,a)]->[a]->(a,a)
 
@@ -50,10 +50,10 @@ train w x y
 --	|otherwise = trainList (train w x y) xs ys
 
 
-perceptron :: (Num a, Ord a) => (a,a) -> [(a,a)] -> [a] -> a -> (a,a)
-perceptron ws xd yd n = trainList ws (cycle xd) (cycle yd) n where
+perceptron :: (Num a, Ord a) => (a,a) -> [(a,a)] -> [a] -> a -> a -> (a,a)
+perceptron ws xd yd n eta = trainList ws (cycle xd) (cycle yd) n where
     trainList w (x:xs) (y:ys) m
         | m < 0 = w
         | checkList w xd yd = w
-        | otherwise = trainList (train w x y) xs ys (m-1)
+        | otherwise = trainList (train w x y eta) xs ys (m-1)
 
