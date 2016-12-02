@@ -26,28 +26,34 @@ scaleV x a = [a*i | i <- x]
 -----------------
 checkClass :: (Num a, Ord a) => [a] -> [a] -> a
 checkClass w x
-	|(dotV x w) >0 = 1
-	|otherwise = -1
+    |(dotV x w) >0 = 1
+    |otherwise = -1
 
 checkList :: (Num a, Ord a) => [a] -> [[a]] -> [a] -> Bool
 checkList _ [] _ = True
 checkList w (x:xs) (y:ys)
-	|(checkClass w x)*y == -1 = False
-	|otherwise = checkList w xs ys
+    |(checkClass w x)*y == -1 = False
+    |otherwise = checkList w xs ys
 
 ----------
 --Træning
 ----------
 train :: (Num a, Ord a) => [a] -> [a] -> a -> a -> [a]
 train w x y eta
-	|checkClass w x == y = w
-	|otherwise = addV w (scaleV (scaleV x eta) y)
+    |checkClass w x == y = w
+    |otherwise = addV w (scaleV (scaleV x eta) y)
 
 
-perceptron :: (Num a, Ord a) => [a] -> [[a]] -> [a] -> a -> a -> [a]
+-- ws er en tilfældig normalvektor til en startplan, ws::[Double]
+-- xd er den ene halvdel af træningssættet der indeholder features, xd::[[Double]]
+-- yd er den anden halvdel af træningssættet der indeholder klasser, yd :: [Double]
+-- n er det maksimale antal iterationer algoritmen skal fortage, n :: Int
+-- eta er læringsraten, eta :: Double
+
+perceptron :: (Num a, Ord a, Show a) => [a] -> [[a]] -> [a] -> Int -> a -> String
 perceptron ws xd yd n eta = trainList ws (cycle xd) (cycle yd) n where
     trainList w (x:xs) (y:ys) m
-        | m < 0 = w
-        | checkList w xd yd = w
+        | m < 0 = "Max iterations reached at w = " ++ show w
+        | checkList w xd yd = "Solution found at iteration " ++ show (n-m) ++ ": w = " ++ show w
         | otherwise = trainList (train w x y eta) xs ys (m-1)
 
