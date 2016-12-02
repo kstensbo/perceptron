@@ -53,6 +53,9 @@ train w x y
 --	|otherwise = trainList (train w x y) xs ys
 
 
-perceptron ws xd yd = trainList ws (cycle xd) (cycle yd)
-	where trainList w (x:xs) (y:ys) = if checkList w xd yd then w else trainList (train w x y) xs ys
+perceptron ws xd yd n = trainList ws (cycle xd) (cycle yd) n where
+    trainList w (x:xs) (y:ys) m
+        | m < 0 = w
+        | checkList w xd yd = w
+        | otherwise = trainList (train w x y) xs ys (m-1)
 
