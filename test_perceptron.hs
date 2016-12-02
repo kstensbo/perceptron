@@ -6,6 +6,9 @@ xData = [(0.6492, 10.5492), (5.0576, -1.9462), (-5.9590, 7.8897), (2.9614, 1.354
 yData :: [Double]
 yData = [-1, 1, -1, 1, 1, 1, 1, -1, 1, 1, 1, -1, -1, -1, -1, -1, 1, 1, 1, 1, -1, -1, -1, 1, -1, 1, 1, -1, -1, -1]
 
+cx = cycle xData
+cy = cycle yData
+
 -------------------
 -- Vektorregning
 -------------------
@@ -22,7 +25,7 @@ scaleV (x1,x2) a = (a*x1,a*x2)
 --Klassificering
 -----------------
 --checkClass :: (Num a, Ord a)=>(a,a)->(a,a)-> a
-checkClass w x 
+checkClass w x
 	|(dotV x w) >0 = 1
 	|otherwise = -1
 
@@ -44,7 +47,7 @@ train w x y
 -- trainList :: (Num a, Ord a)=>(a,a)->[(a,a)]->[a]->(a,a)
 trainList w [] [] = trainList w xData yData
 trainList w (x:xs) (y:ys)
-	|checkList w xData yData = w 
+	|checkList w xData yData = w
 	|otherwise = trainList (train w x y) xs ys
 
 
