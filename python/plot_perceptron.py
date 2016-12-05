@@ -36,17 +36,17 @@ def phi(X):
     x1 = X[:,0]
     x2 = X[:,1]
 
-    #extra = np.array([x1**2, x2**2]).T
-    #extra = np.array([x1**3, x2**2]).T
-    extra = np.atleast_2d(x1 * x2).T
-    #extra = np.array([np.linalg.norm(X, axis=1)]).T
-    #extra = np.array([x1**2, x2**2, x1**3, x2**3]).T
-    #extra = np.array([x1*x2, x1*x2**2, x1*x2**3]).T
-    #extra = np.array([x1*x2, x1*x2**2, x1*x2**3, x1*x2**4]).T
-    #extra = np.array([x1*x2, x1*x2**2, x1*x2**3, x1*x2**4, x1**2, x2**2]).T
+    #extra = [x1**2, x2**2]
+    #extra = [x1**3, x2**2]
+    extra = x1 * x2
+    #extra = np.linalg.norm(X, axis=1)
+    #extra = [x1**2, x2**2, x1**3, x2**3]
+    #extra = [x1*x2, x1*x2**2, x1*x2**3]
+    #extra = [x1*x2, x1*x2**2, x1*x2**3, x1*x2**4]
+    #extra = [x1*x2, x1*x2**2, x1*x2**3, x1*x2**4, x1**2, x2**2]
 
-    Xa = np.hstack((X, extra))  # Use a feature space
-    #Xa = X                     # Don't use a feature space
+    Xa = np.hstack((X, np.atleast_2d(extra).T)) # Use a feature space
+    #Xa = X                                     # Don't use a feature space
 
     return Xa
 
@@ -62,6 +62,7 @@ if __name__ == "__main__":
     #w = [2.,-1.] # one solution!
     #w = [2.0,8.6146,-4.270200000000001]
     w = [1.0,22.3303,-31.955700000000004,13.257563810000004]
+    #w = [5.0,19.6989,2.0796999999999994,82.83335708999999,-58.57112909000003]
 
     # Normalise weight vector:
     w = np.array(w)
