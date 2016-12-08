@@ -36,9 +36,9 @@ def phi(X):
     x1 = X[:,0]
     x2 = X[:,1]
 
-    #extra = [x1**2, x2**2]
+    extra = [x1**2, x2**2]
     #extra = [x1**3, x2**2]
-    extra = x1 * x2
+    #extra = x1 * x2
     #extra = np.linalg.norm(X, axis=1)
     #extra = [x1**2, x2**2, x1**3, x2**3]
     #extra = [x1*x2, x1*x2**2, x1*x2**3]
@@ -53,16 +53,18 @@ def phi(X):
 if __name__ == "__main__":
 
 
-    X, y = make_blobs(30, n_features=2, centers=2, cluster_std=2,
-                      random_state=42
-                      )
-    #X, y = make_circles(100, noise=0.1, factor=0.4, random_state=42)
+    #X, y = make_blobs(30, n_features=2, centers=2, cluster_std=2,
+    #                  random_state=42
+    #                  )
+    X, y = make_circles(100, noise=0.1, factor=0.4, random_state=42)
 
     # Define weights:
     #w = [2.,-1.] # one solution!
     #w = [2.0,8.6146,-4.270200000000001]
-    w = [1.0,22.3303,-31.955700000000004,13.257563810000004]
+    #w = [1.0,22.3303,-31.955700000000004,13.257563810000004]
     #w = [5.0,19.6989,2.0796999999999994,82.83335708999999,-58.57112909000003]
+    w = [2.0,-6.899999999999795e-3,-8.709999999999987e-2,-2.7207966700000004,-3.67863569]
+
 
     # Normalise weight vector:
     w = np.array(w)
