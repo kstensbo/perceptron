@@ -15,6 +15,8 @@ xCircles = [[1, x1, x2] | (x1, x2) <- xCircles']
 yCircles :: [Double]
 yCircles = [1, 1, 1, -1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, 1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1, -1, 1, -1, 1, 1, -1, -1, -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1, -1, 1, -1, 1, 1, 1, 1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, -1, 1, 1, 1, -1, 1, 1, 1, 1, -1, -1, -1, 1, -1, -1, -1, 1, 1, 1, 1, 1, -1, 1, 1, -1, 1, 1]
 
+phi x = [[1,x1,x2,x1^2,x2^2]|[1,x1,x2]<-x]
+
 
 -------------------
 -- Vektorregning
@@ -44,8 +46,8 @@ checkList w (x:xs) (y:ys)
 
 accuracy _ [] _ = []
 accuracy w (x:xs) (y:ys)
-	|(checkClass w x)*y == -1 = accuracy w xs ys
-	|otherwise = 1: accuracy w xs ys
+    |(checkClass w x)*y == -1 = accuracy w xs ys
+    |otherwise = 1: accuracy w xs ys
 
 
 ----------
@@ -73,17 +75,17 @@ perceptron ws xd yd n eta = trainList ws (cycle xd) (cycle yd) n where
 
 
 --phi er Feature Space, phi :: ([a]->[a])
---f.eks. (\[1,x1,x2]->[1,x1,x2])
+--f.eks. (\[1,x1,x2]->[1,x1,x2]) eller (\x->x)
 --       (\[1,x1,x2]->[1,x1^2,x2^2])
 --       (\[1,x1,x2]->[1,x1,x2,x1*x2])
 --       (\[1,x1,x2]->[1,x1,x2,x1^2,x2^2])
 
 perceptronFS :: (Num a, Ord a, Show a) => [a] -> [[a]] -> [a] -> Int -> a ->([a]->[a])->String
-perceptronFS ws xd yd n eta phi = trainList ws (cycle (map phi xd)) (cycle yd) n where
+perceptronFS ws xd yd n eta phi = trainList ws (cycle $ map phi xd) (cycle yd) n where
     trainList w (x:xs) (y:ys) m
-        | m < 0 = "Max iterations reached at w = " ++ show w ++ " , accuracy = " ++ show (sum (accuracy w xd yd)) ++ "/" ++ show (length xd)
+        | m < 0 = "Max iterations reached at w = " ++ show w ++ " , accuracy = " ++ show (sum (accuracy w (map phi xd) yd)) ++ "/" ++ show (length xd)
  
-        | checkList w xd yd = "Solution found at iteration " ++ show (n-m) ++ ": w = " ++ show w 
+        | checkList w (map phi xd) yd = "Solution found at iteration " ++ show (n-m) ++ ": w = " ++ show w 
         | otherwise = trainList (train w x y eta) xs ys (m-1)
 
 
