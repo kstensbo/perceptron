@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.datasets import make_blobs, make_circles
+from sklearn.datasets import *
 
 import matplotlib.pyplot as plt
 
@@ -22,7 +22,9 @@ if __name__ == "__main__":
 #    X, y = make_blobs(30, n_features=2, centers=2, cluster_std=2,
 #                     random_state=42
 #                      )
-    X, y = make_circles(100, noise=0.1, factor=0.4, random_state=42)
+    #X, y = make_circles(100, noise=0.1, factor=0.4, random_state=42)
+    X, y = make_classification(100, 2, n_informative=1, n_redundant=0,
+                               n_clusters_per_class=1, random_state=1)
 
     w = [2.,-1.] # one solution!
     w = [2.0,8.6146,-4.270200000000001]

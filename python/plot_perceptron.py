@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.datasets import make_blobs, make_circles
+from sklearn.datasets import *
 from scipy.ndimage.interpolation import zoom, spline_filter
 from scipy.ndimage.filters import gaussian_filter
 
@@ -54,21 +54,22 @@ if __name__ == "__main__":
 
 
     #X, y = make_blobs(30, n_features=2, centers=2, cluster_std=2,
-    #                  random_state=42
-    #                  )
-    X, y = make_circles(100, noise=0.1, factor=0.4, random_state=42)
+    #                  random_state=42)
+    #
+    #X, y = make_circles(100, noise=0.1, factor=0.4, random_state=42)
+
+    X, y = make_moons(100, noise=0.1, random_state=42)
+
+    #X, y = make_classification(100, 2, n_informative=1, n_redundant=0,
+    #                           n_clusters_per_class=1, random_state=1)
 
     # Define weights:
-    #w = [2.,-1.] # one solution!
-    #w = [2.0,8.6146,-4.270200000000001]
-    #w = [1.0,22.3303,-31.955700000000004,13.257563810000004]
-    #w = [5.0,19.6989,2.0796999999999994,82.83335708999999,-58.57112909000003]
-    w = [2.0,-6.899999999999795e-3,-8.709999999999987e-2,-2.7207966700000004,-3.67863569]
+    w = [1,1,1,1,1]
+    w = [1.0,1.8584,-3.1,0.64,0.204]
 
 
     # Normalise weight vector:
-    w = np.array(w)
-    w /= np.linalg.norm(w)
+    w = np.asarray(w) / np.linalg.norm(w)
 
     y[y == 0] = -1
 
