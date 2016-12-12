@@ -90,6 +90,13 @@ perceptronFS ws xd yd n eta phi = trainList ws (cycle $ map phi xd) (cycle yd) n
 
 
 
+perceptronBS :: (Num a, Ord a, Show a) => [a] -> [[a]] -> [a] -> Int -> a ->([a]->[a])->String
+perceptronBS ws xd yd n eta phi = trainList ws (cycle featureX) (cycle yd) n ws
+    where featureX = map phi xd
+          trainList w (x:xs) (y:ys) m bs
+            | m < 0 = "Max iterations reached at w = " ++ show w ++ " , accuracy = " ++ show (sum (accuracy w featureX yd)) ++ "/" ++ show (length xd) ++ " , best so far:" ++ show (bs, (sum $ accuracy bs featureX yd) / fromIntegral (length xd)) 
+            | checkList w featureX yd = "Solution found at iteration " ++ show (n-m) ++ ": w = " ++ show w 
+            | otherwise = trainList (train w x y eta) xs ys (m-1) (if accuracy w featureX yd > accuracy bs featureX yd then w else bs)
 
 
 
