@@ -1,0 +1,254 @@
+\documentclass[10pt,twoside]{scrartcl}
+
+% Load typeface package
+\usepackage[light, easyscsl, noDcommand]{kpfonts}
+
+% Load standard packages
+\usepackage[utf8]{inputenc}				% Input encoding: UTF-8
+\usepackage[T1]{fontenc}				% Font encoding: T1
+\usepackage{graphicx}					% Graphics package
+\usepackage[danish]{babel}              % Localisation package
+\renewcommand\danishhyphenmins{22}      % Better Danish hyphenation
+
+\graphicspath{{figures/}}
+
+% Load paper geometry package
+\usepackage[a4paper,                    % Paper size
+            left=3.8cm,                 % Left margin
+            right=3.8cm,                % Right margin
+			top=3cm,                    % Top margin
+			bottom=3cm]{geometry}       % Bottom margin
+
+% Load math related packages
+\usepackage{amssymb,amsmath}            % AMS packages
+\usepackage{mathtools}					% Extra math commands
+\usepackage{bm}							% Bold math
+
+% Load packages for scientific articles
+\usepackage{siunitx}					% SI units
+\usepackage[round,semicolon]{natbib}	% Natural science refereneces
+\usepackage{array,booktabs}             % Nice tables
+%\setlength{\bibsep}{0.0pt}
+
+% Load miscellaneous packgaes
+\usepackage{xcolor}						% Extended package for colouring
+\usepackage{ellipsis}					% Fixes ellipses before letters
+\usepackage{xspace}						% Add space after text macros with \xspace
+\usepackage{paralist}					% Lists in paragraphs
+\usepackage{caption}                    % Nicer captions
+%\usepackage{subcaption}                 % Captions for subfigures
+\usepackage{fixme}                      % FiXme notes to yourself
+
+% Load cross reference packages
+\usepackage{hyperref}					% PDF links for cross-references, citations, etc.
+\usepackage{bookmark}					% Fixes aspects of the hyperref package
+
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+
+% Units
+\sisetup{%
+    %per=slash,
+	%round-precision = 3,
+	%round-mode = figures,
+    separate-uncertainty = true,
+	list-separator = {\text{, }},
+	list-final-separator = {\text{, and }}
+}
+
+% FiXme setup
+%\fxsetup{draft, english, marginclue, footnote}
+\fxsetup{final, english, marginclue, footnote}
+
+% Caption setup
+\captionsetup{%
+%    width=.8\textwidth,
+    font=small,
+    labelfont={sf,bf},
+    labelsep=space
+}
+
+\usepackage[font=footnotesize, caption=false]{subfig}
+%\usepackage{subfig}
+
+
+% Define some extra colours
+\definecolor{dark-red}{rgb}{0.4,0.15,0.15}
+\definecolor{dark-blue}{rgb}{0.15,0.15,0.4}
+\definecolor{medium-blue}{rgb}{0,0,0.5}
+\definecolor{light-grey}{rgb}{0.98,0.98,0.98}
+\colorlet{light-blue}{blue!50!cyan}
+%\colorlet{light-red}{red!100!magenta}
+\colorlet{light-red}{red!50!purple}
+
+% Cross references
+\hypersetup{
+	colorlinks,
+    %linkcolor={dark-red},
+	linkcolor={light-red},
+	%citecolor={cyan},
+	citecolor={light-blue},
+	urlcolor={light-blue},
+	unicode=true,
+    pdftitle={Kernel perceptrons},         % title
+    pdfauthor={Kristoffer Stensbo-Smidt},         % author
+}
+
+% Header and footer
+\usepackage{fancyhdr}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}   % Select page style
+
+% Customise header and footer
+\fancyhf{}  % Erase the current page style
+%\lhead[Kristoffer Stensbo-Smidt]{}
+\lhead[]{}
+\rhead{\scshape Kernel perceptrons}
+\lfoot[\thepage]{}
+%\cfoot[\thepage]{\thepage}
+\rfoot[]{\thepage}
+
+
+% Define custom commands
+\newcommand{\divg}[1]{\nabla \cdot #1}          % Divergence
+\newcommand{\curl}[1]{\nabla \times #1}         % Curl
+\let\oldvec\vec
+\renewcommand{\vec}[1]{\bm{\mathrm{#1}}}        % Vectors should be bold
+\newcommand{\mat}[1]{\bm{\mathrm{#1}}}          % So should matrices
+\newcommand{\T}{^\mathsf{T}}                    % Transpose
+\newcommand{\w}{\vec w}
+\newcommand{\wo}{\vec w_{\textup{opt}}}
+\newcommand{\wh}{\hat{\vec w}}
+\newcommand{\woh}{\hat{\vec w}_{\textup{opt}}}
+\newcommand{\x}{\vec x}
+\newcommand{\xh}{\hat{\vec x}}
+\newcommand{\R}{\mathbb R}
+\renewcommand{\C}{\mathcal C}
+\newcommand{\M}{\mathcal M}
+\newcommand{\N}{\mathbb N}
+
+\DeclareMathOperator{\id}{d\!}                  % Proper integration d's
+\DeclareMathOperator{\e}{e}                     % Exponential e
+\DeclareMathOperator{\sgn}{sgn}                 % Sign
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}   % Absolute value
+\DeclarePairedDelimiter{\avg}{\langle}{\rangle} % Mean value
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+% Better handling of abbreviations
+\newcommand{\eg}{e.g.\xspace}
+\newcommand{\ie}{i.e.\xspace}
+\newcommand{\etc}{etc.\xspace}
+\newcommand{\dvs}{dvs.\xspace}
+\newcommand{\fx}{f.eks.\xspace}
+
+
+
+% Set title, author and date of the document
+\title{Kernel perceptrons}
+\author{Kristoffer Stensbo-Smidt}
+\date{\today}
+
+\begin{document}
+\maketitle
+%
+
+\section{Standard perceptron}
+I den normale perceptron definerer vi en hyperplan $\vec w$, som skal adskille
+$N$ datapunkter $\vec x \in \R^D$ tilhørende en af to klasser $t \in \{-1,
++1\}$.
+
+Den forudsagte klasse for et nyt datapunkt, $\vec x'$, er fortegnet af $\vec w\T
+\vec x'$, altså
+\begin{align}
+    \label{eq:prediction}
+    y' = \sgn(\vec w\T\vec x')\ .
+\end{align}
+Perceptronnen trænes med stochastic gradient descent, hvor vi iterativt vælger
+et tilfældigt datapunkt $\vec x_i$ fra træningssættet og, hvis punktet er
+forkert klassificeret, \dvs $y_i \neq x_i$, opdateres hyperplanen,
+\begin{align}
+    \vec w_{k+1} = \vec w_{k} + \eta t_i \vec x_i\ .
+\end{align}
+Opdateringerne stoppes, når alle punker er korrekt klassificeret.
+
+\section{Kernel perceptron}
+I en kernel perceptron introducerer vi en kernel, $k(\vec x', \vec x)$, som
+beregner et mål for, hvor ens to vektorer $\vec x'$ og $\vec x$ er.
+
+For at omskrive perceptron-algoritmen indser vi først, at alle opdateringer af
+hyperplanen $\vec w$ kan skrives som en sum over opdateringer af de
+misklassificerede datapunkter. Hvis vi vælger starthyperplanen $\vec w_0 = \vec
+0$ og $\eta = 1$ fås
+\begin{align}
+    \vec w_{k+1} &= t_1 \vec x_1 + t_2 \vec x_2 + \dots + t_k \vec x_k \\
+                 &= \sum_{i = 1}^k t_i \vec x_i\\
+                 &= \sum_{i = 1}^N \alpha_i t_i \vec x_i \ ,
+\end{align}
+hvor $\vec\alpha \in \N^N$ er en vektor af heltal (0 inklusiv) med samme længde
+som datasættet. Hvert datapunkt har et tilhørende element i $\vec\alpha$, som
+angiver hvor mange gange datapunktet er blevet brugt i summen til at opdatere
+hyperplanen.
+
+Med denne nye formulering af hyperplanen, kan vi omskrive
+ligning~\eqref{eq:prediction} til
+\begin{align}
+    y' &= \sgn\left( \sum_{i = 1}^N \alpha_i t_i \vec x_i\T \right) \vec x' \\
+       &= \sgn \sum_{i = 1}^N \alpha_i t_i (\vec x_i\T \vec x') \ .
+\end{align}
+Vi har nu den forudsagte klasse for $\vec x'$ udtrykt ved et indre produkt
+mellem $\vec x'$ og et datapunkt fra træningssættet $\vec x_i$.
+Det såkaldte \emph{kernel trick} siger, at man altid kan erstatte et indre
+produkt med en kernel, så vores omskrevne forudsigelse kommer altså til at være
+\begin{align}
+    \label{eq:kernel perceptron}
+    y' = \sgn \sum_{i = 1}^N \alpha_i t_i k(\vec x_i, \vec x') \ .
+\end{align}
+
+For at træne den nye perceptron, skal vi ikke længere opdatere $\vec w$, men
+derimod $\vec\alpha$. Vi starter med at sætte $\vec\alpha = \vec 0$, og
+itererer nu indtil alle punkter er korrekt klassificeret. For hver iteration
+vælges et tilfældigt datapunkt $\vec x_j$ og $y_j$ beregnes med ligning
+\eqref{eq:kernel perceptron}:
+\begin{align}
+    y_j = \sgn \sum_{i = 1}^{N-1} \alpha_i t_i k(\vec x_i, \vec x_j) \ .
+\end{align}
+Hvis $y_j \neq t_j$ lægges $1$ til det tilsvarende element i $\vec\alpha$,
+$\alpha_j \leftarrow \alpha_j + 1$. Dette fortsættes som sagt indtil alle
+punkter i træningssættet er korrekt klassificeret.
+
+\subsection{Kernels}
+Kernels er funktioner, der beregner for ens to datapunkter er. Typiske kernels
+er
+\begin{align}
+    \label{eq:kernels}
+    k_\text{lin}(\vec x, \vec x') &= (\vec x - c)\T(\vec x' - c), \tag{Lineær}\\
+    k_\text{poly}(\vec x, \vec x') &= (\vec x\T\vec x' + c)^n, \tag{Polynoium}\\
+    k_\text{per}(\vec x, \vec x') &= \exp\left( -\frac{2}{\ell^2}
+    \sin^2\left( \pi \frac{\| \vec x-\vec x'\|}{p}  \right) \right),
+    \tag{Periodisk}\\
+    k_\text{RBF}(\vec x, \vec x') &= \exp\left( -\frac{\| \vec x - \vec
+    x'\|^2}{2\ell^2} \right) \tag{Radial basis function}
+\end{align}
+Kernels har typisk en eller flere parametre, som skal vælges, \fx $\ell$ og $c$
+ovenfor. Man kan prøve forskellige værdier og vælge den kombination, der virker
+bedst.
+
+Man kan også kombinere kernels til en ny ved at lægge dem sammen eller gange dem
+sammen. F.eks.\ kunne man gøre følgende:
+\begin{align}
+    \label{eq:kernel combinations}
+    k_1(\vec x, \vec x') &= k_\text{lin}(\vec x, \vec x') \cdot
+    k_\text{RBF}(\vec x, \vec x')\\
+    k_2(\vec x, \vec x') &= k_\text{RBF}(\vec x, \vec x') \cdot
+    k_\text{per}(\vec x, \vec x')\\
+    k_3(\vec x, \vec x') &= k_\text{lin}(\vec x, \vec x') \cdot
+    k_\text{per}(\vec x, \vec x') + k_\text{RBF}(\vec x, \vec x')
+\end{align}
+
+
+
+\bibliographystyle{chicago}
+%\bibliographystyle{mnras}
+\bibliography{bibliography}
+%\bibliography{/home/ks/refs.bib}
+\end{document}
